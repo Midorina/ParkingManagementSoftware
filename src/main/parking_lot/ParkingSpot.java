@@ -1,25 +1,28 @@
-package sample;
+package main.parking_lot;
+
+import main.vehicles.Vehicle;
+import main.vehicles.VehicleSize;
 
 public class ParkingSpot {
     private Vehicle parkedVehicle;
     private VehicleSize spotSize;
-    private Level level;
+    private ParkingLotFloor parkingLotFloor;
     private int row;
     private int spotNumber;
 
-    public ParkingSpot(Level lvl, int r, int n,
+    public ParkingSpot(ParkingLotFloor lvl, int r, int n,
                        VehicleSize s) {
         this.spotSize = s;
         this.row = r;
         this.spotNumber = n;
-        this.level = lvl;
+        this.parkingLotFloor = lvl;
     }
 
     public boolean isFree() {
         return parkedVehicle == null;
     }
 
-    boolean canFitVehicle(Vehicle vehicle) {
+    public boolean canFitVehicle(Vehicle vehicle) {
         return vehicle.getSize() == this.spotSize;
     }
 
@@ -33,7 +36,7 @@ public class ParkingSpot {
         }
 
         this.parkedVehicle = v;
-        if (v.parkedSpot != this) {
+        if (v.getParkedSpot() != this) {
             v.parkinSpot(this);
         }
 
@@ -48,15 +51,15 @@ public class ParkingSpot {
         return this.spotNumber;
     }
 
-    public Level getLevel() {
-        return this.level;
+    public ParkingLotFloor getParkingLotFloor() {
+        return this.parkingLotFloor;
     }
 
     public Vehicle getParkedVehicle() {
         return this.parkedVehicle;
     }
 
-    void removeVehicle() {
+    public void removeVehicle() {
         this.parkedVehicle = null;
     }
 }

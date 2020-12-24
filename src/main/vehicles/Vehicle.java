@@ -1,5 +1,7 @@
-package sample;
+package main.vehicles;
 
+
+import main.parking_lot.ParkingSpot;
 
 public abstract class Vehicle {
     protected ParkingSpot parkedSpot = null;
@@ -27,6 +29,10 @@ public abstract class Vehicle {
 
     public boolean isParked() {
         return parkedSpot != null;
+    }
+
+    public ParkingSpot getParkedSpot() {
+        return parkedSpot;
     }
 }
 

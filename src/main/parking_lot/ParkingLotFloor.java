@@ -1,19 +1,26 @@
-package sample;
+package main.parking_lot;
+
+import main.vehicles.Vehicle;
+import main.vehicles.VehicleSize;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Level {
+public class ParkingLotFloor {
     private int floor;
     private ArrayList<ParkingSpot> spots;
-    private static final int SPOTS_PER_ROW = 10;
+    private static final int ROWS_PER_LEVEL = 5;
+    private static final int SPOTS_PER_ROW = 5;
 
-    public Level(int flr) {
+    public ParkingLotFloor(int flr) {
         this.floor = flr;
-        // todo: this
-//        for(int i=0; i<SPOTS_PER_ROW; i++) {
-//            spots.add(new ParkingSpot(this, ))
-//        }
+        this.spots = new ArrayList<ParkingSpot>();
+
+        for(int row=0; row<ROWS_PER_LEVEL; row++) {
+            for (int spot=0; spot<SPOTS_PER_ROW; spot++) {
+                spots.add(new ParkingSpot(this, row, spot, VehicleSize.Automobile));
+            }
+        }
     }
 
     private ArrayList<ParkingSpot> getAllAvailableSpots(Vehicle v) {

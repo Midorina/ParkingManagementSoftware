@@ -1,4 +1,4 @@
-package sample;
+package main.vehicles;
 
 public class Motorcycle extends Vehicle {
     public Motorcycle() {
