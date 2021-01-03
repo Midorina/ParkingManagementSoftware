@@ -44,7 +44,7 @@ public class Main {
                     window.frmCarParking.paint(null);
                     window.frmCarParking.setVisible(true);
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    showError(e.getMessage(), true);
                 }
             }
         });
@@ -61,7 +61,7 @@ public class Main {
         try {
             db = new SQLite("parking_lot.db");
         } catch (Exception e) {
-            showError(e.getMessage());
+            showError(e.getMessage(), true);
             return;
         }
 
@@ -160,7 +160,7 @@ public class Main {
                     // todo: add to db
                     ;
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    showError(e.getMessage(), false);
                 }
             }
         };
@@ -319,7 +319,10 @@ public class Main {
 
     }
 
-    void showError(String msg) {
+    static void showError(String msg, boolean exitAfterwards) {
         JOptionPane.showMessageDialog(null, msg, "Error", JOptionPane.ERROR_MESSAGE);
+        if (exitAfterwards) {
+            System.exit(-1);
+        }
     }
 }
