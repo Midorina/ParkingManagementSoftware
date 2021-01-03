@@ -4,7 +4,7 @@ import java.sql.*;
 import java.util.ArrayList;
 
 import main.parking_lot.ParkedVehicle;
-import main.parking_lot.ParkingSpot;
+import main.gui.ParkingSpot;
 
 public class SQLite {
     private Connection c;

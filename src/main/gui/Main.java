@@ -17,10 +17,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Main {
-    public static ArrayList<ParkedVehicle> parkedCars = new ArrayList<ParkedVehicle>();
-    public static HashMap<ParkedVehicle, Boolean> parkedCarsHashMap = new HashMap<ParkedVehicle, Boolean>();
-
-    public ArrayList<JCheckBox> checkBoxes = new ArrayList<JCheckBox>();
+    public ArrayList<ParkedVehicle> parkedCars = new ArrayList<ParkedVehicle>();
+    public ArrayList<ParkingSpot> parkingSpots = new ArrayList<ParkingSpot>();
 
     private JFrame frmCarParking;
     private JTextField tfName;
@@ -30,7 +28,6 @@ public class Main {
     private JTextField tfDuration;
     private JTextField tfDate;
     private JTextField tfTime;
-    private final ButtonGroup buttonGroup = new ButtonGroup();
 
     private SQLite db;
 
@@ -72,7 +69,7 @@ public class Main {
 
         frmCarParking = new JFrame();
         frmCarParking.getContentPane().setBackground(Color.WHITE);
-        frmCarParking.setTitle("PROJECT");
+        frmCarParking.setTitle("Car Parking Management System");
         frmCarParking.setBounds(100, 100, 761, 442);
         frmCarParking.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frmCarParking.getContentPane().setLayout(null);
@@ -113,7 +110,7 @@ public class Main {
                 tfplcNmbr.setText(_currentCheckbox.getText());
 
                 // make other red checkboxes green
-                for (JCheckBox _otherCheckbox : checkBoxes) {
+                for (JCheckBox _otherCheckbox : parkingSpots) {
                     if (_otherCheckbox != _currentCheckbox && _otherCheckbox.getBackground() != Color.GREEN) {
                         _otherCheckbox.setBackground(Color.GREEN);
                     }
@@ -129,15 +126,14 @@ public class Main {
         int yGap = 104;
 
         for (int i = 1; i <= slotNames.length; i++) {
-            final JCheckBox spot = new JCheckBox(slotNames[i - 1]);
+            ParkingSpot spot = new ParkingSpot(slotNames[i - 1]);
 
             spot.setBackground(Color.GREEN);
             spot.addActionListener(chekboxListener);
             spot.setBounds(xState, yState, 50, 80);
 
-            buttonGroup.add(spot);
             panel.add(spot);
-            checkBoxes.add(spot);
+            parkingSpots.add(spot);
 
             if (i % 6 == 0) {
                 xState = 6;
@@ -150,10 +146,6 @@ public class Main {
         ActionListener doneListener = new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 ParkedVehicle temp = new ParkedVehicle();
-                if (parkedCarsHashMap.get(temp) == null) {
-                    parkedCars.add(temp);
-                    parkedCarsHashMap.put(temp, true);
-                }
                 tfcarNmbr.setText("");
                 tfName.setText("");
                 tfcellNmbr.setText("");

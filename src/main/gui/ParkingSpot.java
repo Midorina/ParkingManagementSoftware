@@ -1,4 +1,6 @@
-package main.parking_lot;
+package main.gui;
+
+import main.parking_lot.ParkedVehicle;
 
 import javax.swing.*;
 
@@ -7,6 +9,7 @@ public class ParkingSpot extends JCheckBox {
     private ParkedVehicle parkedVehicle;
 
     public ParkingSpot(String spotName) {
+        super(spotName);
         this.spotName = spotName;
     }
 

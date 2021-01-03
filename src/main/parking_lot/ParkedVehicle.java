@@ -1,5 +1,7 @@
 package main.parking_lot;
 
+import main.gui.ParkingSpot;
+
 public class ParkedVehicle {
 	private final int dbID;
 	private final String licensePlate;
