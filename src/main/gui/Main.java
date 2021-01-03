@@ -14,7 +14,6 @@ import javax.swing.border.SoftBevelBorder;
 import javax.swing.border.BevelBorder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.io.*;
 import java.util.*;
 
 public class Main {
@@ -88,10 +87,10 @@ public class Main {
         frmCarParking.getContentPane().add(labelus);
 
         JLabel lbldis = new JLabel("DISABLED PARKING ONLY: A-D,B-D,C-D");
-	lbldis.setFont(new Font("Sitka Text", Font.BOLD, 13));
-	lbldis.setForeground(SystemColor.text);
-	lbldis.setBounds(50, 380, 360, 20);
-	frmCarParking.getContentPane().add(lbldis);
+        lbldis.setFont(new Font("Sitka Text", Font.BOLD, 13));
+        lbldis.setForeground(SystemColor.text);
+        lbldis.setBounds(50, 380, 360, 20);
+        frmCarParking.getContentPane().add(lbldis);
 
         JLabel lblNewLabel_1 = new JLabel("THANK YOU AND DRIVE SAFELY!");
         lblNewLabel_1.setFont(new Font("Sitka Text", Font.BOLD, 20));
@@ -150,10 +149,9 @@ public class Main {
 
         ActionListener doneListener = new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
+                // todo: overhaul
                 ParkedVehicle temp = new ParkedVehicle();
                 tfcarNmbr.setText("");
-                tfName.setText("");
-                tfcellNmbr.setText("");
                 tfplcNmbr.setText("");
                 tfTime.setText("");
                 tfDuration.setText("");
