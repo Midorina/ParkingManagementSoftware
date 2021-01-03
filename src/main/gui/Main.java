@@ -313,7 +313,7 @@ public class Main {
 
         //for background
         JLabel labelback = new JLabel("");
-        labelback.setIcon(new ImageIcon("C:\\Users\\BD\\Desktop\\parking.jpg"));
+        labelback.setIcon(new ImageIcon("assets/bg.jpg"));
         labelback.setBounds(0, 79, 745, 324);
         frmCarParking.getContentPane().add(labelback);
 
