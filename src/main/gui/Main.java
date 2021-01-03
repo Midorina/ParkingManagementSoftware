@@ -91,10 +91,10 @@ public class Main {
         frmCarParking.getContentPane().add(labelus);
         
         JLabel lbldis = new JLabel("DISABLED PARKING ONLY: A-D,B-D,C-D");
-		lbldis.setFont(new Font("Sitka Text", Font.BOLD, 13));
-		lbldis.setForeground(SystemColor.text);
-		lbldis.setBounds(50, 380, 360, 20);
-		frmCarParking.getContentPane().add(lbldis);
+	lbldis.setFont(new Font("Sitka Text", Font.BOLD, 13));
+	lbldis.setForeground(SystemColor.text);
+	lbldis.setBounds(50, 380, 360, 20);
+	frmCarParking.getContentPane().add(lbldis);
 
         JLabel lblNewLabel_1 = new JLabel("THANK YOU AND DRIVE SAFELY!");
         lblNewLabel_1.setFont(new Font("Sitka Text", Font.BOLD, 20));
@@ -267,7 +267,7 @@ public class Main {
             }
         });
 
-        donebtn.setFont(new Font("Sitka Text", Font.PLAIN, 11));
+        donebtn.setFont(new Font("Sitka Text", Font.PLAIN, 12));
         donebtn.setBounds(510, 338, 89, 23);
         frmCarParking.getContentPane().add(donebtn);
 
