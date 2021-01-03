@@ -32,8 +32,6 @@ public class Main {
     public ArrayList<JCheckBox> checkBoxes = new ArrayList<JCheckBox>();
 
     private JFrame frmCarParking;
-    private JTextField tfName;
-    private JTextField tfcellNmbr;
     private JTextField tfcarNmbr;
     private JTextField tfplcNmbr;
     private JTextField tfDuration;
@@ -91,6 +89,12 @@ public class Main {
         labelus.setForeground(Color.BLACK);
         labelus.setBounds(122, 40, 740, 40);
         frmCarParking.getContentPane().add(labelus);
+        
+        JLabel lbldis = new JLabel("DISABLED PARKING ONLY: A-D,B-D,C-D");
+		lbldis.setFont(new Font("Sitka Text", Font.BOLD, 13));
+		lbldis.setForeground(SystemColor.text);
+		lbldis.setBounds(50, 380, 360, 20);
+		frmCarParking.getContentPane().add(lbldis);
 
         JLabel lblNewLabel_1 = new JLabel("THANK YOU AND DRIVE SAFELY!");
         lblNewLabel_1.setFont(new Font("Sitka Text", Font.BOLD, 20));
@@ -151,99 +155,71 @@ public class Main {
         JTextPane pnCarNmbr = new JTextPane();
         pnCarNmbr.setBackground(Color.BLACK);
         pnCarNmbr.setForeground(SystemColor.text);
-        pnCarNmbr.setFont(new Font("Sitka Text", Font.BOLD, 11));
+        pnCarNmbr.setFont(new Font("Sitka Text", Font.BOLD, 13));
         pnCarNmbr.setText("CAR NUMBER:");
-        pnCarNmbr.setBounds(386, 87, 89, 20);
+        pnCarNmbr.setBounds(386, 95, 109, 25);
         frmCarParking.getContentPane().add(pnCarNmbr);
 
         tfcarNmbr = new JTextField();
         tfcarNmbr.setBackground(SystemColor.inactiveCaptionBorder);
         tfcarNmbr.setColumns(10);
-        tfcarNmbr.setBounds(496, 87, 178, 20);
+        tfcarNmbr.setBounds(510, 95, 100, 25);
         frmCarParking.getContentPane().add(tfcarNmbr);
-
-        JTextPane pnName = new JTextPane();
-        pnName.setBackground(Color.BLACK);
-        pnName.setForeground(Color.WHITE);
-        pnName.setFont(new Font("Sitka Text", Font.BOLD, 11));
-        pnName.setText("NAME:");
-        pnName.setBounds(386, 115, 46, 20);
-        frmCarParking.getContentPane().add(pnName);
-
-        tfName = new JTextField();
-        tfName.setBackground(SystemColor.inactiveCaptionBorder);
-        tfName.setBounds(496, 115, 178, 20);
-        frmCarParking.getContentPane().add(tfName);
-        tfName.setColumns(10);
-
-        JTextPane pnCellNmbr = new JTextPane();
-        pnCellNmbr.setBackground(Color.BLACK);
-        pnCellNmbr.setForeground(Color.WHITE);
-        pnCellNmbr.setFont(new Font("Sitka Text", Font.BOLD, 11));
-        pnCellNmbr.setText("CELL No:");
-        pnCellNmbr.setBounds(386, 143, 61, 20);
-        frmCarParking.getContentPane().add(pnCellNmbr);
-
-        tfcellNmbr = new JTextField();
-        tfcellNmbr.setBackground(SystemColor.inactiveCaptionBorder);
-        tfcellNmbr.setColumns(10);
-        tfcellNmbr.setBounds(496, 143, 178, 20);
-        frmCarParking.getContentPane().add(tfcellNmbr);
-
+        
         JTextPane pnPlcNmbr = new JTextPane();
         pnPlcNmbr.setForeground(Color.WHITE);
         pnPlcNmbr.setBackground(Color.BLACK);
-        pnPlcNmbr.setFont(new Font("Sitka Text", Font.BOLD, 11));
+        pnPlcNmbr.setFont(new Font("Sitka Text", Font.BOLD, 13));
         pnPlcNmbr.setText("SLOT:");
-        pnPlcNmbr.setBounds(386, 174, 67, 20);
+        pnPlcNmbr.setBounds(386, 135, 46, 25);
         frmCarParking.getContentPane().add(pnPlcNmbr);
 
         tfplcNmbr = new JTextField();
         tfplcNmbr.setBackground(SystemColor.inactiveCaptionBorder);
         tfplcNmbr.setColumns(10);
-        tfplcNmbr.setBounds(496, 174, 67, 20);
+        tfplcNmbr.setBounds(510, 135, 40, 25);
         frmCarParking.getContentPane().add(tfplcNmbr);
 
         JTextPane pnTime = new JTextPane();
         pnTime.setBackground(Color.BLACK);
         pnTime.setForeground(Color.WHITE);
-        pnTime.setFont(new Font("Sitka Text", Font.BOLD, 11));
+        pnTime.setFont(new Font("Sitka Text", Font.BOLD, 13));
         pnTime.setText("FROM:");
-        pnTime.setBounds(386, 205, 77, 20);
+        pnTime.setBounds(386, 175, 46, 25);
         frmCarParking.getContentPane().add(pnTime);
 
         JTextPane pnEndTime = new JTextPane();
         pnEndTime.setForeground(Color.WHITE);
         pnEndTime.setBackground(Color.BLACK);
-        pnEndTime.setFont(new Font("Sitka Text", Font.BOLD, 11));
+        pnEndTime.setFont(new Font("Sitka Text", Font.BOLD, 13));
         pnEndTime.setText("TO:");
-        pnEndTime.setBounds(386, 235, 73, 20);
+        pnEndTime.setBounds(386, 215, 30, 25);
         frmCarParking.getContentPane().add(pnEndTime);
 
         JTextPane pnDate = new JTextPane();
         pnDate.setBackground(Color.BLACK);
         pnDate.setForeground(Color.WHITE);
-        pnDate.setFont(new Font("Sitka Text", Font.BOLD, 11));
+        pnDate.setFont(new Font("Sitka Text", Font.BOLD, 13));
         pnDate.setText("DATE:");
-        pnDate.setBounds(386, 266, 46, 20);
+        pnDate.setBounds(386, 255, 46, 25);
         frmCarParking.getContentPane().add(pnDate);
 
         JTextPane txtpnTotalCost = new JTextPane();
         txtpnTotalCost.setForeground(Color.WHITE);
         txtpnTotalCost.setBackground(Color.BLACK);
-        txtpnTotalCost.setFont(new Font("Sitka Text", Font.BOLD, 11));
+        txtpnTotalCost.setFont(new Font("Sitka Text", Font.BOLD, 13));
         txtpnTotalCost.setText("COST:");
-        txtpnTotalCost.setBounds(386, 297, 53, 20);
+        txtpnTotalCost.setBounds(386, 295, 46, 25);
         frmCarParking.getContentPane().add(txtpnTotalCost);
 
         JTextField txtTkPer = new JTextField();
         txtTkPer.setText("5$ per hour");
         txtTkPer.setBackground(SystemColor.inactiveCaptionBorder);
         txtTkPer.setColumns(10);
-        txtTkPer.setBounds(496, 297, 100, 20);
+        txtTkPer.setBounds(510, 295, 75, 25);
         frmCarParking.getContentPane().add(txtTkPer);
 
-        final JButton donebtn = new JButton("Done");
+        final JButton donebtn = new JButton("DONE");
         donebtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 try {
@@ -292,26 +268,26 @@ public class Main {
         });
 
         donebtn.setFont(new Font("Sitka Text", Font.PLAIN, 11));
-        donebtn.setBounds(535, 338, 89, 23);
+        donebtn.setBounds(510, 338, 89, 23);
         frmCarParking.getContentPane().add(donebtn);
 
         tfTime = new JTextField();
         tfTime.setBackground(SystemColor.inactiveCaptionBorder);
         tfTime.setForeground(SystemColor.desktop);
-        tfTime.setBounds(496, 205, 106, 20);
+        tfTime.setBounds(510, 175, 75, 25);
         frmCarParking.getContentPane().add(tfTime);
         tfTime.setColumns(10);
 
         tfDuration = new JTextField();
         tfDuration.setBackground(SystemColor.inactiveCaptionBorder);
         tfDuration.setForeground(SystemColor.desktop);
-        tfDuration.setBounds(496, 235, 85, 20);
+        tfDuration.setBounds(510, 215, 75, 25);
         frmCarParking.getContentPane().add(tfDuration);
         tfDuration.setColumns(10);
 
         tfDate = new JTextField();
         tfDate.setBackground(SystemColor.inactiveCaptionBorder);
-        tfDate.setBounds(496, 266, 106, 20);
+        tfDate.setBounds(510, 255, 75, 25);
         frmCarParking.getContentPane().add(tfDate);
         tfDate.setColumns(10);
 
@@ -329,7 +305,7 @@ public class Main {
             }
         });
         rdtime1.setBackground(SystemColor.activeCaptionText);
-        rdtime1.setBounds(469, 205, 21, 23);
+        rdtime1.setBounds(485, 177, 21, 23);
         frmCarParking.getContentPane().add(rdtime1);
 
 
@@ -346,7 +322,7 @@ public class Main {
             }
         });
         rdtime2.setBackground(SystemColor.activeCaptionText);
-        rdtime2.setBounds(469, 235, 21, 23);
+        rdtime2.setBounds(485, 217, 21, 23);
         frmCarParking.getContentPane().add(rdtime2);
 
 
@@ -363,7 +339,7 @@ public class Main {
             }
         });
         rddate.setBackground(SystemColor.activeCaptionText);
-        rddate.setBounds(469, 263, 21, 23);
+        rddate.setBounds(485, 257, 21, 23);
         frmCarParking.getContentPane().add(rddate);
 
 
