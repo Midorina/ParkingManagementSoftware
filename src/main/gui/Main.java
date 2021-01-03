@@ -97,274 +97,137 @@ public class Main {
         frmCarParking.getContentPane().add(panel);
         panel.setLayout(null);
 
+        ActionListener chekboxListener = new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                JCheckBox _checkBox = (JCheckBox) e.getSource();
+                _checkBox.setBackground(Color.RED);
+                tfplcNmbr.setText(_checkBox.getText());
+            }
+        };
 
         //all the parking slots by using checkboxes
         final JCheckBox A_1 = new JCheckBox("A1");
         A_1.setBackground(Color.GREEN);
-        A_1.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (e.getSource() == A_1) {
-                    A_1.setBackground(Color.RED);
-                    String s = "A1";
-                    tfplcNmbr.setText(s);
-                }
-            }
-        });
+        A_1.addActionListener(chekboxListener);
         buttonGroup.add(A_1);
         A_1.setBounds(6, 7, 50, 80);
         panel.add(A_1);
 
         final JCheckBox A_2 = new JCheckBox("A2");
         A_2.setBackground(Color.GREEN);
-        A_2.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (e.getSource() == A_2) {
-                    A_2.setBackground(Color.RED);
-                    String s = "A2";
-                    tfplcNmbr.setText(s);
-                }
-            }
-        });
+        A_2.addActionListener(chekboxListener);
         buttonGroup.add(A_2);
         A_2.setBounds(64, 7, 50, 80);
         panel.add(A_2);
 
         final JCheckBox A_3 = new JCheckBox("A3");
         A_3.setBackground(Color.GREEN);
-        A_3.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (e.getSource() == A_3) {
-                    A_3.setBackground(Color.RED);
-                    String s = "A3";
-                    tfplcNmbr.setText(s);
-                }
-            }
-        });
+        A_3.addActionListener(chekboxListener);
         buttonGroup.add(A_3);
         A_3.setBounds(122, 7, 50, 80);
         panel.add(A_3);
 
         final JCheckBox A_4 = new JCheckBox("A4");
         A_4.setBackground(Color.GREEN);
-        A_4.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (e.getSource() == A_4) {
-                    A_4.setBackground(Color.RED);
-                    String s = "A4";
-                    tfplcNmbr.setText(s);
-                }
-            }
-        });
+        A_4.addActionListener(chekboxListener);
         buttonGroup.add(A_4);
         A_4.setBounds(180, 7, 50, 80);
         panel.add(A_4);
 
         final JCheckBox A_5 = new JCheckBox("A5");
         A_5.setBackground(Color.GREEN);
-        A_5.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (e.getSource() == A_5) {
-                    A_5.setBackground(Color.RED);
-                    String s = "A5";
-                    tfplcNmbr.setText(s);
-                }
-            }
-        });
+        A_5.addActionListener(chekboxListener);
         buttonGroup.add(A_5);
         A_5.setBounds(238, 7, 50, 80);
         panel.add(A_5);
 
         final JCheckBox priv_a = new JCheckBox("DP");
         priv_a.setBackground(Color.GREEN);
-        priv_a.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (e.getSource() == priv_a) {
-                    priv_a.setBackground(Color.RED);
-                    String s = "D-A";
-                    tfplcNmbr.setText(s);
-                }
-            }
-        });
+        priv_a.addActionListener(chekboxListener);
         buttonGroup.add(priv_a);
         priv_a.setBounds(296, 7, 50, 80);
         panel.add(priv_a);
 
         final JCheckBox B_1 = new JCheckBox("B1");
         B_1.setBackground(Color.GREEN);
-        B_1.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (e.getSource() == B_1) {
-                    B_1.setBackground(Color.RED);
-                    String s = "B1";
-                    tfplcNmbr.setText(s);
-                }
-            }
-        });
+        B_1.addActionListener(chekboxListener);
         buttonGroup.add(B_1);
         B_1.setBounds(6, 111, 50, 80);
         panel.add(B_1);
 
         final JCheckBox B_2 = new JCheckBox("B2");
         B_2.setBackground(Color.GREEN);
-        B_2.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (e.getSource() == B_2) {
-                    B_2.setBackground(Color.RED);
-                    String s = "B2";
-                    tfplcNmbr.setText(s);
-                }
-            }
-        });
+        B_2.addActionListener(chekboxListener);
         buttonGroup.add(B_2);
         B_2.setBounds(64, 111, 50, 80);
         panel.add(B_2);
 
         final JCheckBox B_3 = new JCheckBox("B3");
         B_3.setBackground(Color.GREEN);
-        B_3.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (e.getSource() == B_3) {
-                    B_3.setBackground(Color.RED);
-                    String s = "B3";
-                    tfplcNmbr.setText(s);
-                }
-            }
-        });
+        B_3.addActionListener(chekboxListener);
         buttonGroup.add(B_3);
         B_3.setBounds(122, 111, 50, 80);
         panel.add(B_3);
 
         final JCheckBox B_4 = new JCheckBox("B4");
         B_4.setBackground(Color.GREEN);
-        B_4.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (e.getSource() == B_4) {
-                    B_4.setBackground(Color.RED);
-                    String s = "B4";
-                    tfplcNmbr.setText(s);
-                }
-            }
-        });
+        B_4.addActionListener(chekboxListener);
         buttonGroup.add(B_4);
         B_4.setBounds(180, 111, 50, 80);
         panel.add(B_4);
 
         final JCheckBox B_5 = new JCheckBox("B5");
         B_5.setBackground(Color.GREEN);
-        B_5.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (e.getSource() == B_5) {
-                    B_5.setBackground(Color.RED);
-                    String s = "B5";
-                    tfplcNmbr.setText(s);
-                }
-            }
-        });
+        B_5.addActionListener(chekboxListener);
         buttonGroup.add(B_5);
         B_5.setBounds(238, 111, 50, 80);
         panel.add(B_5);
 
         final JCheckBox priv_b = new JCheckBox("DP");
         priv_b.setBackground(Color.GREEN);
-        priv_b.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (e.getSource() == priv_b) {
-                    priv_b.setBackground(Color.RED);
-                    String s = "D-B";
-                    tfplcNmbr.setText(s);
-                }
-            }
-        });
+        priv_b.addActionListener(chekboxListener);
         buttonGroup.add(priv_b);
         priv_b.setBounds(296, 111, 50, 80);
         panel.add(priv_b);
 
         final JCheckBox C_1 = new JCheckBox("C1");
         C_1.setBackground(Color.GREEN);
-        C_1.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (e.getSource() == C_1) {
-                    C_1.setBackground(Color.RED);
-                    String s = "C1";
-                    tfplcNmbr.setText(s);
-                }
-            }
-        });
+        C_1.addActionListener(chekboxListener);
         buttonGroup.add(C_1);
         C_1.setBounds(6, 215, 50, 80);
         panel.add(C_1);
 
         final JCheckBox C_2 = new JCheckBox("C2");
         C_2.setBackground(Color.GREEN);
-        C_2.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (e.getSource() == C_2) {
-                    C_2.setBackground(Color.RED);
-                    String s = "C2";
-                    tfplcNmbr.setText(s);
-                }
-            }
-        });
+        C_2.addActionListener(chekboxListener);
         buttonGroup.add(C_2);
         C_2.setBounds(64, 215, 50, 80);
         panel.add(C_2);
 
         final JCheckBox C_3 = new JCheckBox("C3");
         C_3.setBackground(Color.GREEN);
-        C_3.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (e.getSource() == C_3) {
-                    C_3.setBackground(Color.RED);
-                    String s = "C3";
-                    tfplcNmbr.setText(s);
-                }
-            }
-        });
+        C_3.addActionListener(chekboxListener);
         buttonGroup.add(C_3);
         C_3.setBounds(122, 215, 50, 80);
         panel.add(C_3);
 
         final JCheckBox C_4 = new JCheckBox("C4");
         C_4.setBackground(Color.GREEN);
-        C_4.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (e.getSource() == C_4) {
-                    C_4.setBackground(Color.RED);
-                    String s = "C4";
-                    tfplcNmbr.setText(s);
-                }
-            }
-        });
+        C_4.addActionListener(chekboxListener);
         buttonGroup.add(C_4);
         C_4.setBounds(180, 215, 50, 80);
         panel.add(C_4);
 
         final JCheckBox C_5 = new JCheckBox("C5");
         C_5.setBackground(Color.GREEN);
-        C_5.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (e.getSource() == C_5) {
-                    C_5.setBackground(Color.RED);
-                    String s = "C5";
-                    tfplcNmbr.setText(s);
-                }
-            }
-        });
+        C_5.addActionListener(chekboxListener);
         buttonGroup.add(C_5);
         C_5.setBounds(238, 215, 50, 80);
         panel.add(C_5);
 
         final JCheckBox priv_c = new JCheckBox("DP");
         priv_c.setBackground(Color.GREEN);
-        priv_c.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (e.getSource() == priv_c) {
-                    priv_c.setBackground(Color.RED);
-                    String s = "D-C";
-                    tfplcNmbr.setText(s);
-                }
-            }
-        });
+        priv_c.addActionListener(chekboxListener);
         buttonGroup.add(priv_c);
         priv_c.setBounds(296, 215, 50, 80);
         panel.add(priv_c);
