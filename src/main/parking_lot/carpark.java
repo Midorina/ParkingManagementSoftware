@@ -3,11 +3,11 @@ package main.parking_lot;
 public class carpark {
 	public String carnum;
 	public String name;
-    public String cellno;
-    public String placeno;
-    public String startTime;
-    public String duration;
-    public String date;
+   	public String cellno;
+    	public String placeno;
+    	public String startTime;
+   	public String duration;
+    	public String date;
 	
 	public carpark() {
 		carnum = null;
