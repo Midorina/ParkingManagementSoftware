@@ -1,6 +1,7 @@
 package main.gui;
 
-import main.parking_lot.carpark;
+import main.db.SQLite;
+import main.parking_lot.ParkedVehicle;
 
 import java.awt.EventQueue;
 import java.awt.Font;
@@ -8,26 +9,16 @@ import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.ImageIcon;
-import javax.swing.JPanel;
-import javax.swing.JCheckBox;
-import javax.swing.JButton;
+import javax.swing.*;
 import javax.swing.border.SoftBevelBorder;
 import javax.swing.border.BevelBorder;
-import javax.swing.JTextField;
-import javax.swing.JTextPane;
-import javax.swing.JRadioButton;
-import javax.swing.ButtonGroup;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.io.*;
 import java.util.*;
 
 public class Main {
-    public static ArrayList<carpark> car = new ArrayList<carpark>();
-    public static HashMap<carpark, Boolean> hm = new HashMap<carpark, Boolean>();
+    public static ArrayList<ParkedVehicle> parkedCars = new ArrayList<ParkedVehicle>();
+    public static HashMap<ParkedVehicle, Boolean> parkedCarsHashMap = new HashMap<ParkedVehicle, Boolean>();
 
     public ArrayList<JCheckBox> checkBoxes = new ArrayList<JCheckBox>();
 
@@ -41,13 +32,13 @@ public class Main {
     private JTextField tfTime;
     private final ButtonGroup buttonGroup = new ButtonGroup();
 
+    private SQLite db;
+
     private final String[] slotNames = {
             "A1", "A2", "A3", "A4", "A5", "A-D",
             "B1", "B2", "B3", "B4", "B5", "B-D",
             "C1", "C2", "C3", "C4", "C5", "C-D",
     };
-    //private String carnmbr, name, cell;
-
 
     //launch the application
     public static void main(String[] args) {
@@ -71,6 +62,14 @@ public class Main {
 
     //initializing the contents of the frame
     private void initialize() {
+        // file stuff
+        try {
+            db = new SQLite("parking_lot.db");
+        } catch (Exception e) {
+            showError(e.getMessage());
+            return;
+        }
+
         frmCarParking = new JFrame();
         frmCarParking.getContentPane().setBackground(Color.WHITE);
         frmCarParking.setTitle("PROJECT");
@@ -86,7 +85,7 @@ public class Main {
         label.setVerticalAlignment(JLabel.CENTER);
         frmCarParking.getContentPane().add(label);
 
-        JLabel labelus = new JLabel("Programmed by B��ra DEDEO�LU and Yi�it EGEMEN");
+        JLabel labelus = new JLabel("Programmed by Busra DEDEOGLU and Yigit EGEMEN");
         labelus.setFont(new Font("Sitka Text", Font.ITALIC, 20));
         labelus.setForeground(Color.BLACK);
         labelus.setBounds(122, 40, 740, 40);
@@ -129,16 +128,16 @@ public class Main {
         int xGap = 58;
         int yGap = 104;
 
-        for (int i=1; i <= slotNames.length; i++) {
-            final JCheckBox A_1 = new JCheckBox(slotNames[i-1]);
+        for (int i = 1; i <= slotNames.length; i++) {
+            final JCheckBox spot = new JCheckBox(slotNames[i - 1]);
 
-            A_1.setBackground(Color.GREEN);
-            A_1.addActionListener(chekboxListener);
-            A_1.setBounds(xState, yState, 50, 80);
+            spot.setBackground(Color.GREEN);
+            spot.addActionListener(chekboxListener);
+            spot.setBounds(xState, yState, 50, 80);
 
-            buttonGroup.add(A_1);
-            panel.add(A_1);
-            checkBoxes.add(A_1);
+            buttonGroup.add(spot);
+            panel.add(spot);
+            checkBoxes.add(spot);
 
             if (i % 6 == 0) {
                 xState = 6;
@@ -147,6 +146,29 @@ public class Main {
                 xState += xGap;
             }
         }
+
+        ActionListener doneListener = new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {
+                ParkedVehicle temp = new ParkedVehicle();
+                if (parkedCarsHashMap.get(temp) == null) {
+                    parkedCars.add(temp);
+                    parkedCarsHashMap.put(temp, true);
+                }
+                tfcarNmbr.setText("");
+                tfName.setText("");
+                tfcellNmbr.setText("");
+                tfplcNmbr.setText("");
+                tfTime.setText("");
+                tfDuration.setText("");
+                tfDate.setText("");
+                try {
+                    // todo: add to db
+                    ;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
 
         JTextPane pnCarNmbr = new JTextPane();
         pnCarNmbr.setBackground(Color.BLACK);
@@ -244,52 +266,7 @@ public class Main {
         frmCarParking.getContentPane().add(txtTkPer);
 
         final JButton donebtn = new JButton("Done");
-        donebtn.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent arg0) {
-                try {
-                    FileWriter fw = new FileWriter("C:\\Users\\BD\\Desktop\\parking.txt");
-                    fw.write("Name - Car ID - Slot - Phone Number\n");
-                    BufferedWriter bw = new BufferedWriter(fw);
-                    String carnumber = tfcarNmbr.getText();
-                    String name = tfName.getText();
-                    String cellnum = tfcellNmbr.getText();
-                    String slot = tfplcNmbr.getText();
-                    bw.write(name + " " + carnumber + " " + slot + " " + cellnum);
-                    //fw.write(name + " " +carnumber+ " " +slot+ " "+cellnum);
-                    bw.newLine();
-                    bw.close();
-                } catch (Exception e) {
-                    System.out.println("Exception catched");
-                }
-
-                Object obj = arg0.getSource();
-
-                if (obj == donebtn) {
-                    carpark temp = new carpark(tfcarNmbr.getText(), tfName.getText(), tfcellNmbr.getText(), tfplcNmbr.getText(), tfTime.getText(), tfDuration.getText(), tfDate.getText());
-                    if (hm.get(temp) == null) {
-                        car.add(temp);
-                        hm.put(temp, true);
-                    }
-                    tfcarNmbr.setText("");
-                    tfName.setText("");
-                    tfcellNmbr.setText("");
-                    tfplcNmbr.setText("");
-                    tfTime.setText("");
-                    tfDuration.setText("");
-                    tfDate.setText("");
-                    try {
-                        PrintWriter bw = new PrintWriter(new BufferedWriter(new FileWriter("C:\\Users\\BD\\Desktop\\parking1.txt")));
-                        bw.print("Car Number - Name - Cell Number - Slot - From - To - Date\n");
-                        for (main.parking_lot.carpark carpark : car) {
-                            bw.println(carpark.carnum + "\t" + carpark.name + "\t" + carpark.cellno + "\t" + carpark.placeno + "\t" + carpark.startTime + "\t" + carpark.duration + "\t" + carpark.date);
-                        }
-                        bw.close();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
+        donebtn.addActionListener(doneListener);
 
         donebtn.setFont(new Font("Sitka Text", Font.PLAIN, 11));
         donebtn.setBounds(535, 338, 89, 23);
@@ -373,5 +350,9 @@ public class Main {
         labelback.setBounds(0, 79, 745, 324);
         frmCarParking.getContentPane().add(labelback);
 
+    }
+
+    void showError(String msg) {
+        JOptionPane.showMessageDialog(null, msg, "Error", JOptionPane.ERROR_MESSAGE);
     }
 }
