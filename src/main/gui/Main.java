@@ -29,6 +29,8 @@ public class Main {
     public static ArrayList<carpark> car = new ArrayList<carpark>();
     public static HashMap<carpark, Boolean> hm = new HashMap<carpark, Boolean>();
 
+    public ArrayList<JCheckBox> checkBoxes = new ArrayList<JCheckBox>();
+
     private JFrame frmCarParking;
     private JTextField tfName;
     private JTextField tfcellNmbr;
@@ -99,9 +101,20 @@ public class Main {
 
         ActionListener chekboxListener = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                JCheckBox _checkBox = (JCheckBox) e.getSource();
-                _checkBox.setBackground(Color.RED);
-                tfplcNmbr.setText(_checkBox.getText());
+                JCheckBox _currentCheckbox = (JCheckBox) e.getSource();
+
+                // make other red checkboxes green
+                for (JCheckBox _otherCheckbox : checkBoxes) {
+                    if (_otherCheckbox != _currentCheckbox || _otherCheckbox.getBackground() != Color.GREEN) {
+                        _otherCheckbox.setBackground(Color.GREEN);
+                    }
+                }
+
+                // make the selected one red
+                _currentCheckbox.setBackground(Color.RED);
+
+                // move its name to the SLOT field
+                tfplcNmbr.setText(_currentCheckbox.getText());
             }
         };
 
@@ -112,6 +125,7 @@ public class Main {
         buttonGroup.add(A_1);
         A_1.setBounds(6, 7, 50, 80);
         panel.add(A_1);
+        checkBoxes.add(A_1);
 
         final JCheckBox A_2 = new JCheckBox("A2");
         A_2.setBackground(Color.GREEN);
@@ -119,6 +133,7 @@ public class Main {
         buttonGroup.add(A_2);
         A_2.setBounds(64, 7, 50, 80);
         panel.add(A_2);
+        checkBoxes.add(A_2);
 
         final JCheckBox A_3 = new JCheckBox("A3");
         A_3.setBackground(Color.GREEN);
@@ -126,6 +141,7 @@ public class Main {
         buttonGroup.add(A_3);
         A_3.setBounds(122, 7, 50, 80);
         panel.add(A_3);
+        checkBoxes.add(A_3);
 
         final JCheckBox A_4 = new JCheckBox("A4");
         A_4.setBackground(Color.GREEN);
@@ -133,6 +149,7 @@ public class Main {
         buttonGroup.add(A_4);
         A_4.setBounds(180, 7, 50, 80);
         panel.add(A_4);
+        checkBoxes.add(A_4);
 
         final JCheckBox A_5 = new JCheckBox("A5");
         A_5.setBackground(Color.GREEN);
@@ -140,6 +157,7 @@ public class Main {
         buttonGroup.add(A_5);
         A_5.setBounds(238, 7, 50, 80);
         panel.add(A_5);
+        checkBoxes.add(A_5);
 
         final JCheckBox priv_a = new JCheckBox("DP");
         priv_a.setBackground(Color.GREEN);
@@ -147,6 +165,7 @@ public class Main {
         buttonGroup.add(priv_a);
         priv_a.setBounds(296, 7, 50, 80);
         panel.add(priv_a);
+        checkBoxes.add(priv_a);
 
         final JCheckBox B_1 = new JCheckBox("B1");
         B_1.setBackground(Color.GREEN);
@@ -154,6 +173,7 @@ public class Main {
         buttonGroup.add(B_1);
         B_1.setBounds(6, 111, 50, 80);
         panel.add(B_1);
+        checkBoxes.add(B_1);
 
         final JCheckBox B_2 = new JCheckBox("B2");
         B_2.setBackground(Color.GREEN);
@@ -161,6 +181,7 @@ public class Main {
         buttonGroup.add(B_2);
         B_2.setBounds(64, 111, 50, 80);
         panel.add(B_2);
+        checkBoxes.add(B_2);
 
         final JCheckBox B_3 = new JCheckBox("B3");
         B_3.setBackground(Color.GREEN);
@@ -168,6 +189,7 @@ public class Main {
         buttonGroup.add(B_3);
         B_3.setBounds(122, 111, 50, 80);
         panel.add(B_3);
+        checkBoxes.add(B_3);
 
         final JCheckBox B_4 = new JCheckBox("B4");
         B_4.setBackground(Color.GREEN);
@@ -175,6 +197,7 @@ public class Main {
         buttonGroup.add(B_4);
         B_4.setBounds(180, 111, 50, 80);
         panel.add(B_4);
+        checkBoxes.add(B_4);
 
         final JCheckBox B_5 = new JCheckBox("B5");
         B_5.setBackground(Color.GREEN);
@@ -182,6 +205,7 @@ public class Main {
         buttonGroup.add(B_5);
         B_5.setBounds(238, 111, 50, 80);
         panel.add(B_5);
+        checkBoxes.add(B_5);
 
         final JCheckBox priv_b = new JCheckBox("DP");
         priv_b.setBackground(Color.GREEN);
@@ -189,6 +213,7 @@ public class Main {
         buttonGroup.add(priv_b);
         priv_b.setBounds(296, 111, 50, 80);
         panel.add(priv_b);
+        checkBoxes.add(priv_b);
 
         final JCheckBox C_1 = new JCheckBox("C1");
         C_1.setBackground(Color.GREEN);
@@ -196,6 +221,7 @@ public class Main {
         buttonGroup.add(C_1);
         C_1.setBounds(6, 215, 50, 80);
         panel.add(C_1);
+        checkBoxes.add(C_1);
 
         final JCheckBox C_2 = new JCheckBox("C2");
         C_2.setBackground(Color.GREEN);
@@ -203,6 +229,7 @@ public class Main {
         buttonGroup.add(C_2);
         C_2.setBounds(64, 215, 50, 80);
         panel.add(C_2);
+        checkBoxes.add(C_2);
 
         final JCheckBox C_3 = new JCheckBox("C3");
         C_3.setBackground(Color.GREEN);
@@ -210,6 +237,7 @@ public class Main {
         buttonGroup.add(C_3);
         C_3.setBounds(122, 215, 50, 80);
         panel.add(C_3);
+        checkBoxes.add(C_3);
 
         final JCheckBox C_4 = new JCheckBox("C4");
         C_4.setBackground(Color.GREEN);
@@ -217,6 +245,7 @@ public class Main {
         buttonGroup.add(C_4);
         C_4.setBounds(180, 215, 50, 80);
         panel.add(C_4);
+        checkBoxes.add(C_4);
 
         final JCheckBox C_5 = new JCheckBox("C5");
         C_5.setBackground(Color.GREEN);
@@ -224,6 +253,7 @@ public class Main {
         buttonGroup.add(C_5);
         C_5.setBounds(238, 215, 50, 80);
         panel.add(C_5);
+        checkBoxes.add(C_5);
 
         final JCheckBox priv_c = new JCheckBox("DP");
         priv_c.setBackground(Color.GREEN);
@@ -231,7 +261,7 @@ public class Main {
         buttonGroup.add(priv_c);
         priv_c.setBounds(296, 215, 50, 80);
         panel.add(priv_c);
-
+        checkBoxes.add(priv_c);
 
         JTextPane pnCarNmbr = new JTextPane();
         pnCarNmbr.setBackground(Color.BLACK);
