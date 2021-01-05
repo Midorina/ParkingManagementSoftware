@@ -1,13 +1,17 @@
 package main.db;
 
-import java.sql.*;
-import java.util.ArrayList;
-
-import main.parking_lot.ParkedVehicle;
+import main.gui.ParkingLot;
 import main.gui.ParkingSpot;
+import main.parking_lot.Vehicle;
+
+import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 public class SQLite {
     private Connection c;
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public SQLite(String dbName) {
         try {
@@ -28,8 +32,8 @@ public class SQLite {
         }
     }
 
-    public ArrayList<ParkedVehicle> getParkedCars() {
-        ArrayList<ParkedVehicle> cars = new ArrayList<ParkedVehicle>();
+    public ArrayList<Vehicle> getParkedCars(ParkingLot parkingLot) {
+        ArrayList<Vehicle> cars = new ArrayList<>();
 
         try {
             Statement stmt = c.createStatement();
@@ -38,10 +42,12 @@ public class SQLite {
             while (rs.next()) {
                 int id = rs.getInt("ID");
                 String licensePlate = rs.getString("LICENSE_PLATE");
-                ParkingSpot parkedSpot = new ParkingSpot(rs.getString("PARKED_SPOT"));
-                String entryDate = rs.getString("ENTRY_DATE");
+                ParkingSpot parkedSpot = parkingLot.getParkingSpotWithCode(rs.getString("PARKED_SPOT"));
+                LocalDateTime entryDate = LocalDateTime.parse(rs.getString("ENTRY_DATE"), formatter);
 
-                cars.add(new ParkedVehicle(id, licensePlate, parkedSpot, entryDate, null));
+                Vehicle vehicle = new Vehicle(id, licensePlate, parkedSpot, entryDate, null);
+                parkedSpot.setParkedVehicle(vehicle);
+                cars.add(vehicle);
             }
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
@@ -51,4 +57,41 @@ public class SQLite {
         return cars;
     }
 
+    public Vehicle insertNewCar(String licensePlate, ParkingSpot parkedSpot) throws Exception {
+        // for some reason I couldn't make it work with multiple queries at once
+        // so we're having to make them separate
+        String sql = "INSERT INTO parked_cars(LICENSE_PLATE,PARKED_SPOT) VALUES(?,?);";
+        String sql2 = "SELECT last_insert_rowid();";
+        int ID;
+
+        PreparedStatement pstmt = c.prepareStatement(sql);
+        pstmt.setString(1, licensePlate);
+        pstmt.setString(2, parkedSpot.getSpotCode());
+        pstmt.executeUpdate();
+
+        PreparedStatement pstmt2 = c.prepareStatement(sql2);
+        ResultSet rs = pstmt2.executeQuery();
+        ID = rs.getInt("last_insert_rowid()");
+
+        pstmt.close();
+        pstmt2.close();
+
+
+        return new Vehicle(ID, licensePlate, parkedSpot, LocalDateTime.now(), null);
+    }
+
+    public void updateVehicle(Vehicle temp) throws Exception {
+        String sql = "UPDATE parked_cars SET LICENSE_PLATE=?, PARKED_SPOT=?, ENTRY_DATE=?, DEPARTURE_DATE=? WHERE id=?;";
+
+        PreparedStatement pstmt = c.prepareStatement(sql);
+        System.out.println(temp.getDbID());
+        pstmt.setString(1, temp.getLicensePlate());
+        pstmt.setString(2, temp.getParkedSpot().getSpotCode());
+        pstmt.setString(3, temp.getEntryDate().format(formatter));
+        pstmt.setString(4, temp.getDepartureDate().format(formatter));
+        pstmt.setInt(5, temp.getDbID());
+
+        pstmt.executeUpdate();
+        pstmt.close();
+    }
 }
