@@ -61,6 +61,8 @@ public class Vehicle {
 
     public Duration unParkAndGetDuration(SQLite db) throws Exception {
         departureDate = LocalDateTime.now();
+
+
         db.updateVehicle(this);
 
         parkedSpot.setParkedVehicle(null);

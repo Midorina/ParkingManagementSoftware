@@ -8,7 +8,12 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.SoftBevelBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class ParkingLot {
@@ -28,7 +33,6 @@ public class ParkingLot {
     private JButton donebtn;
 
     private SQLite db;
-
 
     //to create the application
     public ParkingLot() {
@@ -185,7 +189,41 @@ public class ParkingLot {
         labelback.setIcon(new ImageIcon("assets/bg.jpg"));
         labelback.setBounds(0, 79, 745, 324);
         frmCarParking.getContentPane().add(labelback);
+
+        //fee changing //need
+        /*JTextPane pnmin = new JTextPane();
+        pnmin.setBackground(Color.BLACK);
+        pnmin.setForeground(Color.WHITE);
+        pnmin.setFont(new Font("Sitka Text", Font.BOLD, 13));
+        pnmin.setText("fee-min:");
+        pnmin.setBounds(386, 305, 65, 25);
+        frmCarParking.getContentPane().add(pnmin);
+        // field
+        JTextField tfmin = new JTextField();
+        tfmin.setBackground(SystemColor.inactiveCaptionBorder);
+        tfmin.setColumns(10);
+        tfmin.setBounds(460, 305, 30, 25);
+        frmCarParking.getContentPane().add(tfmin);
+        String feemin = tfmin.getText();
+        //int feehour = Integer.parseInt(feemin);
+
+            JTextPane pnmin1 = new JTextPane();
+            pnmin1.setBackground(Color.BLACK);
+            pnmin1.setForeground(Color.WHITE);
+            pnmin1.setFont(new Font("Sitka Text", Font.BOLD, 13));
+            pnmin1.setText("fee-hour:");
+            pnmin1.setBounds(500, 305, 65, 25);
+            frmCarParking.getContentPane().add(pnmin1);
+        //int feehour1 = feehour * 60;
+       // int feehour2 = Integer.toString(feehour1);
+            JTextField tfmin1 = new JTextField();
+            tfmin1.setBackground(SystemColor.inactiveCaptionBorder);
+            tfmin1.setColumns(10);
+            tfmin1.setBounds(570, 305, 30, 25);
+            frmCarParking.getContentPane().add(tfmin1);*/
+
     }
+
 
     void updateParkingSpots(ParkingSpot updatedCheckbox, boolean untickUpdated) {
         if (untickUpdated)
@@ -219,6 +257,60 @@ public class ParkingLot {
                 } else {
                     // move license plate too if parked
                     tfLicensePlate.setText(updatedCheckbox.getParkedVehicle().getLicensePlate());
+
+                    //start time
+                    JTextPane pnStartTime = new JTextPane();
+                    pnStartTime.setForeground(Color.WHITE);
+                    pnStartTime.setBackground(Color.BLACK);
+                    pnStartTime.setFont(new Font("Sitka Text", Font.BOLD, 11));
+                    pnStartTime.setText("Parking Start Time:");
+                    pnStartTime.setBounds(386, 180, 96, 40);
+                    frmCarParking.getContentPane().add(pnStartTime);
+                    // Start Time field
+                    //LocalDateTime stime = vehicle.getEntryDate();
+                    //String stime1 = stime.toString();
+                    JTextField tfStartTime = new JTextField();
+                    tfStartTime.setForeground(Color.BLACK);
+                    tfStartTime.setBackground(SystemColor.inactiveCaptionBorder);
+                    tfStartTime.setColumns(10);
+                    tfStartTime.setBounds(510, 180, 200, 25);
+                    frmCarParking.getContentPane().add(tfStartTime);
+
+                    //current time
+                    JTextPane pnCurrentTime = new JTextPane();
+                    pnCurrentTime.setForeground(Color.WHITE);
+                    pnCurrentTime.setBackground(Color.BLACK);
+                    pnCurrentTime.setFont(new Font("Sitka Text", Font.BOLD, 11));
+                    pnCurrentTime.setText("Current Time");
+                    pnCurrentTime.setBounds(386, 240, 96, 20);
+                    frmCarParking.getContentPane().add(pnCurrentTime);
+                    //Current Time field
+                    LocalDateTime currentTime = LocalDateTime.now();
+                    String a = currentTime.toString();
+                    JTextField tfCurrentTime = new JTextField(a);
+                    tfCurrentTime.setForeground(Color.BLACK);
+                    tfCurrentTime.setBackground(SystemColor.inactiveCaptionBorder);
+                    tfCurrentTime.setColumns(10);
+                    tfCurrentTime.setBounds(510, 240, 200, 25);
+                    frmCarParking.getContentPane().add(tfCurrentTime);
+
+                    /*Duration durationfee = vehicle.seefee();
+                    double currentfee = durationfee.toMinutes() * feePerMinute;*/
+                    JTextPane pnCurrentFee = new JTextPane();
+                    pnCurrentFee.setForeground(Color.WHITE);
+                    pnCurrentFee.setBackground(Color.BLACK);
+                    pnCurrentFee.setFont(new Font("Sitka Text", Font.BOLD, 13));
+                    pnCurrentFee.setText("Current Fee");
+                    pnCurrentFee.setBounds(386, 280, 96, 20);
+                    frmCarParking.getContentPane().add(pnCurrentFee);
+                    //current fee field
+                    JTextField tfCurrentFee = new JTextField();
+                    tfCurrentFee.setForeground(Color.BLACK);
+                    tfCurrentFee.setBackground(SystemColor.inactiveCaptionBorder);
+                    tfCurrentFee.setColumns(10);
+                    tfCurrentFee.setBounds(510, 280, 50, 25);
+                    frmCarParking.getContentPane().add(tfCurrentFee);
+
                     donebtn.setText("Unpark");
                     updatedCheckbox.setBackground(new Color(114, 1, 1));
                 }
@@ -251,13 +343,13 @@ public class ParkingLot {
                 double fee = duration.toMinutes() * feePerMinute;
 
                 updateParkingSpots(vehicle.getParkedSpot(), true);
-                showSuccess(vehicle.getLicensePlate() + " had been parked for " + duration.toMinutesPart() + " minute(s). The fee is $" + fee + ".");
+                //showSuccess(vehicle.getLicensePlate() + " had been parked for " + duration.toMinutesPart() + " minute(s). The fee is $" + fee + ".");
+                showSuccess("License Plate: " + vehicle.getLicensePlate() + "\nEntry Time: "+ vehicle.getEntryDate() + "\nDeparture Time: " + vehicle.getDepartureDate() + "\nTotal Park Time: " + duration.toMinutesPart() + " minute(s)." + "\nThe fee is $" + fee + ".");
             }
             // park new car
             else {
                 vehicle = db.insertNewCar(licensePlate, actualSpotObj);
                 actualSpotObj.park(vehicle);
-
                 updateParkingSpots(vehicle.getParkedSpot(), true);
                 showSuccess("Vehicle is parked.");
             }

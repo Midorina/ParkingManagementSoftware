@@ -4,6 +4,7 @@ import main.gui.ParkingLot;
 import main.gui.ParkingSpot;
 import main.parking_lot.Vehicle;
 
+import javax.swing.table.TableStringConverter;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -12,6 +13,8 @@ import java.util.ArrayList;
 public class SQLite {
     private Connection c;
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+
 
     public SQLite(String dbName) {
         try {
