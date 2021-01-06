@@ -1,6 +1,7 @@
 package main.parking_lot;
 
 import main.db.SQLite;
+import main.gui.ParkingLot;
 import main.gui.ParkingSpot;
 
 import java.time.Duration;
@@ -12,6 +13,7 @@ public class Vehicle {
     private final LocalDateTime entryDate;
     private ParkingSpot parkedSpot;
     private LocalDateTime departureDate;
+
 
     public Vehicle(int dbID,
                    String licensePlate,
@@ -59,14 +61,40 @@ public class Vehicle {
         return entryDate;
     }
 
-    public Duration unParkAndGetDuration(SQLite db) throws Exception {
+    public void unpark(SQLite db) throws Exception {
         departureDate = LocalDateTime.now();
-
 
         db.updateVehicle(this);
 
         parkedSpot.setParkedVehicle(null);
+    }
 
+    public double unparkAndGetFee(SQLite db) throws Exception {
+        unpark(db);
+        return getFeeUntilDeparture();
+    }
+
+    public Duration getDurationUntilDeparture() {
         return Duration.between(entryDate, departureDate);
+    }
+
+    public Duration getCurrentDuration() {
+        return Duration.between(entryDate, LocalDateTime.now());
+    }
+
+    public double getFeeUntilDeparture() {
+        return getDurationUntilDeparture().toMinutes() * ParkingLot.feePerMinute;
+    }
+
+    public double getCurrentFee() {
+        return getCurrentDuration().toMinutes() * ParkingLot.feePerMinute;
+    }
+
+    public String getEntryDateString() {
+        return entryDate.format(ParkingLot.dateFormatter);
+    }
+
+    public String getDepartureDateString() {
+        return departureDate.format(ParkingLot.dateFormatter);
     }
 }

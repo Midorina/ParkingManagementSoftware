@@ -8,16 +8,17 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.SoftBevelBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.sql.Date;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.Duration;
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class ParkingLot {
-    private final double feePerMinute = 0.1;
+    public static final double feePerMinute = 0.1;
+    public static final Font FONT = new Font("Sitka Text", Font.BOLD, 13);
+    public static final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("hh:mm:ss dd-MM-yyyy");
+    public static DecimalFormat decimalFormat = new DecimalFormat("#.##");
+
     private final String[] slotNames = {
             "A1", "A2", "A3", "A4", "A5", "A-D",
             "B1", "B2", "B3", "B4", "B5", "B-D",
@@ -26,6 +27,8 @@ public class ParkingLot {
 
     public ArrayList<Vehicle> parkedCars = new ArrayList<>();
     public ArrayList<ParkingSpot> parkingSpots = new ArrayList<>();
+    public ArrayList<JTextPane> textPanes = new ArrayList<>();
+    public ArrayList<JTextField> textFields = new ArrayList<>();
 
     private JFrame frmCarParking;
     private JTextField tfLicensePlate;
@@ -60,7 +63,7 @@ public class ParkingLot {
     }
 
     static void showSuccess(String msg) {
-        JOptionPane.showMessageDialog(null, msg);
+        JOptionPane.showMessageDialog(null, new JTextArea(msg));
     }
 
     //initializing the contents of the frame
@@ -95,7 +98,7 @@ public class ParkingLot {
         frmCarParking.getContentPane().add(labelus);
 
         JLabel lbldis = new JLabel("DISABLED PARKING ONLY: A-D,B-D,C-D");
-        lbldis.setFont(new Font("Sitka Text", Font.BOLD, 13));
+        lbldis.setFont(FONT);
         lbldis.setForeground(SystemColor.text);
         lbldis.setBounds(50, 380, 360, 20);
         frmCarParking.getContentPane().add(lbldis);
@@ -106,76 +109,21 @@ public class ParkingLot {
         lblNewLabel_1.setBounds(386, 370, 360, 30);
         frmCarParking.getContentPane().add(lblNewLabel_1);
 
-        JPanel panel = new JPanel();
-        panel.setBackground(SystemColor.activeCaption);
-        panel.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, new Color(192, 192, 192), Color.LIGHT_GRAY));
-        panel.setBounds(0, 79, 352, 324);
-        frmCarParking.getContentPane().add(panel);
-        panel.setLayout(null);
-
-        ActionListener chekboxListener = e -> updateParkingSpots((ParkingSpot) e.getSource(), false);
-
-        //all the parking slots by using checkboxes
-        int xState = 6;
-        int yState = 7;
-
-        int xGap = 58;
-        int yGap = 104;
-
-        for (int i = 1; i <= slotNames.length; i++) {
-            String slotCode = slotNames[i - 1];
-
-            ParkingSpot spot = new ParkingSpot(slotCode);
-
-            spot.setBackground(Color.GREEN);
-            spot.addActionListener(chekboxListener);
-            spot.setBounds(xState, yState, 50, 80);
-
-            panel.add(spot);
-            parkingSpots.add(spot);
-
-            if (i % 6 == 0) {
-                xState = 6;
-                yState += yGap;
-            } else {
-                xState += xGap;
-            }
-        }
-
+        addParkingSpots();
         parkedCars = db.getParkedCars(this);
         updateParkingSpots(parkingSpots.get(0), false);
 
         ActionListener doneListener = unnecessary_arg -> parkButtonAction();
 
         // LICENSE PLATE text
-        JTextPane pnLicensePlate = new JTextPane();
-        pnLicensePlate.setBackground(Color.BLACK);
-        pnLicensePlate.setForeground(SystemColor.text);
-        pnLicensePlate.setFont(new Font("Sitka Text", Font.BOLD, 13));
-        pnLicensePlate.setText("License Plate:");
-        pnLicensePlate.setBounds(386, 95, 109, 25);
-        frmCarParking.getContentPane().add(pnLicensePlate);
+        addTextPane("License Plate:", 386, 95, 109, 25, false);
         // LICENSE PLATE field
-        tfLicensePlate = new JTextField();
-        tfLicensePlate.setBackground(SystemColor.inactiveCaptionBorder);
-        tfLicensePlate.setColumns(10);
-        tfLicensePlate.setBounds(510, 95, 100, 25);
-        frmCarParking.getContentPane().add(tfLicensePlate);
+        tfLicensePlate = addTextField(null, 510, 95, 100, 25, false);
 
         // SLOT text
-        JTextPane pnSlot = new JTextPane();
-        pnSlot.setForeground(Color.WHITE);
-        pnSlot.setBackground(Color.BLACK);
-        pnSlot.setFont(new Font("Sitka Text", Font.BOLD, 13));
-        pnSlot.setText("Slot:");
-        pnSlot.setBounds(386, 135, 46, 25);
-        frmCarParking.getContentPane().add(pnSlot);
+        addTextPane("Slot:", 386, 135, 46, 25, false);
         // SLOT field
-        tfSlotCode = new JTextField();
-        tfSlotCode.setBackground(SystemColor.inactiveCaptionBorder);
-        tfSlotCode.setColumns(10);
-        tfSlotCode.setBounds(510, 135, 40, 25);
-        frmCarParking.getContentPane().add(tfSlotCode);
+        tfSlotCode = addTextField(null, 510, 135, 40, 25, false);
 
         // DONE button
         donebtn = new JButton("Park");
@@ -184,8 +132,8 @@ public class ParkingLot {
         donebtn.setBounds(510, 338, 89, 23);
         frmCarParking.getContentPane().add(donebtn);
 
-        //for background
-        JLabel labelback = new JLabel("");
+        // background
+        JLabel labelback = new JLabel();
         labelback.setIcon(new ImageIcon("assets/bg.jpg"));
         labelback.setBounds(0, 79, 745, 324);
         frmCarParking.getContentPane().add(labelback);
@@ -224,6 +172,44 @@ public class ParkingLot {
 
     }
 
+    private void addParkingSpots() {
+        JPanel panel = new JPanel();
+        panel.setBackground(SystemColor.activeCaption);
+        panel.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, new Color(192, 192, 192), Color.LIGHT_GRAY));
+        panel.setBounds(0, 79, 352, 324);
+        panel.setLayout(null);
+        frmCarParking.add(panel);
+
+        ActionListener chekboxListener = e -> updateParkingSpots((ParkingSpot) e.getSource(), false);
+
+        // all the parking slots by using checkboxes
+        int xState = 6;
+        int yState = 7;
+
+        int xGap = 58;
+        int yGap = 104;
+
+        for (int i = 1; i <= slotNames.length; i++) {
+            String slotCode = slotNames[i - 1];
+
+            ParkingSpot spot = new ParkingSpot(slotCode);
+
+            spot.setBackground(Color.GREEN);
+            spot.addActionListener(chekboxListener);
+            spot.setBounds(xState, yState, 50, 80);
+
+            panel.add(spot);
+            parkingSpots.add(spot);
+
+            if (i % 6 == 0) {
+                xState = 6;
+                yState += yGap;
+            } else {
+                xState += xGap;
+            }
+        }
+    }
+
 
     void updateParkingSpots(ParkingSpot updatedCheckbox, boolean untickUpdated) {
         if (untickUpdated)
@@ -254,66 +240,35 @@ public class ParkingLot {
                     updatedCheckbox.setBackground(Color.GRAY);
                     updatedCheckbox.setText(updatedCheckbox.getSpotCode());
                     donebtn.setText("Park");
+
+                    // remove parked fields
+                    removeParkedVehicleInfo();
                 } else {
+                    Vehicle parkedVehicle = updatedCheckbox.getParkedVehicle();
+
                     // move license plate too if parked
-                    tfLicensePlate.setText(updatedCheckbox.getParkedVehicle().getLicensePlate());
+                    tfLicensePlate.setText(parkedVehicle.getLicensePlate());
 
-                    //start time
-                    JTextPane pnStartTime = new JTextPane();
-                    pnStartTime.setForeground(Color.WHITE);
-                    pnStartTime.setBackground(Color.BLACK);
-                    pnStartTime.setFont(new Font("Sitka Text", Font.BOLD, 11));
-                    pnStartTime.setText("Parking Start Time:");
-                    pnStartTime.setBounds(386, 180, 96, 40);
-                    frmCarParking.getContentPane().add(pnStartTime);
-                    // Start Time field
-                    //LocalDateTime stime = vehicle.getEntryDate();
-                    //String stime1 = stime.toString();
-                    JTextField tfStartTime = new JTextField();
-                    tfStartTime.setForeground(Color.BLACK);
-                    tfStartTime.setBackground(SystemColor.inactiveCaptionBorder);
-                    tfStartTime.setColumns(10);
-                    tfStartTime.setBounds(510, 180, 200, 25);
-                    frmCarParking.getContentPane().add(tfStartTime);
+                    // start time
+                    addTextPane("Entry Date:", 386, 220, 96, 20, true);
+                    // start time field
+                    addTextField(parkedVehicle.getEntryDateString(), 510, 220, 200, 20, true).setEditable(false);
 
-                    //current time
-                    JTextPane pnCurrentTime = new JTextPane();
-                    pnCurrentTime.setForeground(Color.WHITE);
-                    pnCurrentTime.setBackground(Color.BLACK);
-                    pnCurrentTime.setFont(new Font("Sitka Text", Font.BOLD, 11));
-                    pnCurrentTime.setText("Current Time");
-                    pnCurrentTime.setBounds(386, 240, 96, 20);
-                    frmCarParking.getContentPane().add(pnCurrentTime);
-                    //Current Time field
-                    LocalDateTime currentTime = LocalDateTime.now();
-                    String a = currentTime.toString();
-                    JTextField tfCurrentTime = new JTextField(a);
-                    tfCurrentTime.setForeground(Color.BLACK);
-                    tfCurrentTime.setBackground(SystemColor.inactiveCaptionBorder);
-                    tfCurrentTime.setColumns(10);
-                    tfCurrentTime.setBounds(510, 240, 200, 25);
-                    frmCarParking.getContentPane().add(tfCurrentTime);
+                    // current time
+                    addTextPane("Current Date", 386, 260, 96, 20, true);
+                    // current time field
+                    addTextField(LocalDateTime.now().format(dateFormatter), 510, 260, 200, 20, true).setEditable(false);
 
-                    /*Duration durationfee = vehicle.seefee();
-                    double currentfee = durationfee.toMinutes() * feePerMinute;*/
-                    JTextPane pnCurrentFee = new JTextPane();
-                    pnCurrentFee.setForeground(Color.WHITE);
-                    pnCurrentFee.setBackground(Color.BLACK);
-                    pnCurrentFee.setFont(new Font("Sitka Text", Font.BOLD, 13));
-                    pnCurrentFee.setText("Current Fee");
-                    pnCurrentFee.setBounds(386, 280, 96, 20);
-                    frmCarParking.getContentPane().add(pnCurrentFee);
-                    //current fee field
-                    JTextField tfCurrentFee = new JTextField();
-                    tfCurrentFee.setForeground(Color.BLACK);
-                    tfCurrentFee.setBackground(SystemColor.inactiveCaptionBorder);
-                    tfCurrentFee.setColumns(10);
-                    tfCurrentFee.setBounds(510, 280, 50, 25);
-                    frmCarParking.getContentPane().add(tfCurrentFee);
+                    // current fee
+                    addTextPane("Current Fee", 386, 300, 96, 20, true);
+                    // current fee field
+                    addTextField(decimalFormat.format(parkedVehicle.getCurrentFee()), 510, 300, 50, 20, true);
 
                     donebtn.setText("Unpark");
                     updatedCheckbox.setBackground(new Color(114, 1, 1));
                 }
+            } else {
+                removeParkedVehicleInfo();
             }
         }
     }
@@ -339,17 +294,20 @@ public class ParkingLot {
             // unpark
             if (!actualSpotObj.isFree()) {
                 vehicle = actualSpotObj.getParkedVehicle();
-                Duration duration = vehicle.unParkAndGetDuration(db);
-                double fee = duration.toMinutes() * feePerMinute;
+                double fee = vehicle.unparkAndGetFee(db);
 
                 updateParkingSpots(vehicle.getParkedSpot(), true);
-                //showSuccess(vehicle.getLicensePlate() + " had been parked for " + duration.toMinutesPart() + " minute(s). The fee is $" + fee + ".");
-                showSuccess("License Plate: " + vehicle.getLicensePlate() + "\nEntry Time: "+ vehicle.getEntryDate() + "\nDeparture Time: " + vehicle.getDepartureDate() + "\nTotal Park Time: " + duration.toMinutesPart() + " minute(s)." + "\nThe fee is $" + fee + ".");
+                showSuccess("License Plate:\t\t" + vehicle.getLicensePlate() +
+                        "\nEntry Time:\t\t" + vehicle.getEntryDateString() +
+                        "\nDeparture Time:\t" + vehicle.getDepartureDateString() +
+                        "\nTotal Park Time:\t" + vehicle.getDurationUntilDeparture().toMinutes() + " minute(s)." +
+                        "\nThe fee:\t\t $" + fee);
             }
             // park new car
             else {
                 vehicle = db.insertNewCar(licensePlate, actualSpotObj);
                 actualSpotObj.park(vehicle);
+
                 updateParkingSpots(vehicle.getParkedSpot(), true);
                 showSuccess("Vehicle is parked.");
             }
@@ -369,4 +327,52 @@ public class ParkingLot {
         }
         return null;
     }
+
+    public JTextPane addTextPane(String str, int x, int y, int width, int height, boolean removeWhenUpdated) {
+        JTextPane pane = new JTextPane();
+        pane.setForeground(Color.WHITE);
+        pane.setBackground(Color.BLACK);
+        pane.setFont(FONT);
+        pane.setText(str);
+        pane.setBounds(x, y, width, height);
+
+        frmCarParking.add(pane);
+        if (removeWhenUpdated)
+            textPanes.add(pane);
+
+        return pane;
+    }
+
+    public JTextField addTextField(String str, int x, int y, int width, int height, boolean removeWhenUpdated) {
+        JTextField field = new JTextField(str);
+
+        field.setForeground(Color.BLACK);
+        field.setBackground(SystemColor.inactiveCaptionBorder);
+        field.setColumns(10);
+        field.setBounds(x, y, width, height);
+
+        frmCarParking.add(field);
+        if (removeWhenUpdated)
+            textFields.add(field);
+
+        return field;
+    }
+
+    public void removeParkedVehicleInfo() {
+        for (Component comp :
+                frmCarParking.getContentPane().getComponents()) {
+            if (textFields.contains(comp) || textPanes.contains(comp)) {
+                frmCarParking.remove(comp);
+                frmCarParking.revalidate();
+                frmCarParking.repaint();
+
+                if (comp instanceof JTextField)
+                    textFields.remove(comp);
+                if (comp instanceof JTextPane)
+                    textPanes.remove(comp);
+            }
+
+        }
+    }
+
 }
