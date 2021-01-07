@@ -1,9 +1,6 @@
-package main.gui;
-
-import main.parking_lot.Vehicle;
+package main;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class ParkingSpot extends JCheckBox {
     private final String spotCode;
@@ -18,18 +15,13 @@ public class ParkingSpot extends JCheckBox {
         return vehicle == null;
     }
 
-    public void park(Vehicle v) throws Exception {
+    public void park(Vehicle vehicle) throws Exception {
         if (!this.isFree()) {
             throw new Exception("Spot isn't free!");
         }
 
-        this.vehicle = v;
-        if (v.getParkedSpot() != this) {
-            v.setParkedSpot(this);
-        }
-
-        this.setBackground(Color.RED);
-        this.setText(v.getLicensePlate());
+        this.vehicle = vehicle;
+        vehicle.setParkedSpot(this);
     }
 
     public Vehicle getParkedVehicle() {

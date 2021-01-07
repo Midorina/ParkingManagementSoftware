@@ -1,8 +1,6 @@
-package main.parking_lot;
+package main;
 
 import main.db.SQLite;
-import main.gui.ParkingLot;
-import main.gui.ParkingSpot;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -32,7 +30,6 @@ public class Vehicle {
         return this.departureDate == null;
     }
 
-
     public int getDbID() {
         return this.dbID;
     }
@@ -41,37 +38,24 @@ public class Vehicle {
         return this.parkedSpot;
     }
 
-    public LocalDateTime getDepartureDate() {
-        return departureDate;
-    }
-
-    public void setDepartureDate(LocalDateTime departureDate) {
-        this.departureDate = departureDate;
-    }
-
     public String getLicensePlate() {
         return licensePlate;
-    }
-
-    public void setParkedSpot(ParkingSpot parkedSpot) {
-        this.parkedSpot = parkedSpot;
     }
 
     public LocalDateTime getEntryDate() {
         return entryDate;
     }
 
-    public void unpark(SQLite db) throws Exception {
-        departureDate = LocalDateTime.now();
-
-        db.updateVehicle(this);
-
-        parkedSpot.setParkedVehicle(null);
+    public String getEntryDateString() {
+        return entryDate.format(ParkingLot.dateFormatter);
     }
 
-    public double unparkAndGetFee(SQLite db) throws Exception {
-        unpark(db);
-        return getFeeUntilDeparture();
+    public LocalDateTime getDepartureDate() {
+        return departureDate;
+    }
+
+    public String getDepartureDateString() {
+        return departureDate.format(ParkingLot.dateFormatter);
     }
 
     public Duration getDurationUntilDeparture() {
@@ -90,11 +74,25 @@ public class Vehicle {
         return getCurrentDuration().toMinutes() * ParkingLot.feePerMinute;
     }
 
-    public String getEntryDateString() {
-        return entryDate.format(ParkingLot.dateFormatter);
+    public void setDepartureDate(LocalDateTime departureDate) {
+        this.departureDate = departureDate;
     }
 
-    public String getDepartureDateString() {
-        return departureDate.format(ParkingLot.dateFormatter);
+    public void setParkedSpot(ParkingSpot parkedSpot) {
+        this.parkedSpot = parkedSpot;
     }
+
+    public void unpark(SQLite db) throws Exception {
+        setDepartureDate(LocalDateTime.now());
+        db.updateVehicle(this);
+
+        parkedSpot.removeVehicle();
+    }
+
+    public double unparkAndGetFee(SQLite db) throws Exception {
+        unpark(db);
+        return getFeeUntilDeparture();
+    }
+
+
 }

@@ -1,13 +1,12 @@
 package main.db;
 
-import main.gui.ParkingLot;
-import main.gui.ParkingSpot;
-import main.parking_lot.Vehicle;
+import main.ParkingLot;
+import main.ParkingSpot;
+import main.Vehicle;
 
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 
 public class SQLite {
     private Connection c;
@@ -28,14 +27,12 @@ public class SQLite {
             stmt.executeUpdate(sql);
             stmt.close();
         } catch (Exception e) {
-            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.err.println(e.getMessage());
             System.exit(0);
         }
     }
 
-    public ArrayList<Vehicle> getParkedCars(ParkingLot parkingLot) {
-        ArrayList<Vehicle> cars = new ArrayList<>();
-
+    public void assignParkedCarsToSpots(ParkingLot parkingLot) {
         try (Statement stmt = c.createStatement()) {
             ResultSet rs = stmt.executeQuery("SELECT * FROM parked_cars WHERE DEPARTURE_DATE is NULL;");
 
@@ -47,24 +44,21 @@ public class SQLite {
 
                 Vehicle vehicle = new Vehicle(id, licensePlate, parkedSpot, entryDate, null);
                 parkedSpot.setParkedVehicle(vehicle);
-                cars.add(vehicle);
             }
         } catch (Exception e) {
-            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.err.println(e.getMessage());
             System.exit(0);
         }
-
-        return cars;
     }
 
     public Vehicle insertNewCar(String licensePlate, ParkingSpot parkedSpot) throws Exception {
         // for some reason I couldn't make it work with multiple queries at once
         // so we're having to make them separate
-        String sql = "INSERT INTO parked_cars(LICENSE_PLATE,PARKED_SPOT) VALUES(?,?);";
+        String sql1 = "INSERT INTO parked_cars(LICENSE_PLATE,PARKED_SPOT) VALUES(?,?);";
         String sql2 = "SELECT last_insert_rowid();";
         int ID;
 
-        try (PreparedStatement pstmt = c.prepareStatement(sql);
+        try (PreparedStatement pstmt = c.prepareStatement(sql1);
              PreparedStatement pstmt2 = c.prepareStatement(sql2)) {
             pstmt.setString(1, licensePlate);
             pstmt.setString(2, parkedSpot.getSpotCode());

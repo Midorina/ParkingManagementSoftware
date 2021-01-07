@@ -1,7 +1,6 @@
-package main.gui;
+package main;
 
 import main.db.SQLite;
-import main.parking_lot.Vehicle;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
@@ -17,38 +16,35 @@ public class ParkingLot {
     public static final double feePerMinute = 0.1;
     public static final Font FONT = new Font("Sitka Text", Font.BOLD, 13);
     public static final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("hh:mm:ss dd-MM-yyyy");
-    public static DecimalFormat decimalFormat = new DecimalFormat("#.##");
-
-    private final String[] slotNames = {
+    public static final DecimalFormat decimalFormat = new DecimalFormat("#.##");
+    public static final String[] slotNames = {
             "A1", "A2", "A3", "A4", "A5", "A-D",
             "B1", "B2", "B3", "B4", "B5", "B-D",
             "C1", "C2", "C3", "C4", "C5", "C-D",
     };
 
-    public ArrayList<Vehicle> parkedCars = new ArrayList<>();
-    public ArrayList<ParkingSpot> parkingSpots = new ArrayList<>();
-    public ArrayList<JTextPane> textPanes = new ArrayList<>();
-    public ArrayList<JTextField> textFields = new ArrayList<>();
+    private final ArrayList<ParkingSpot> parkingSpots = new ArrayList<>();
+    private final ArrayList<JTextPane> textPanes = new ArrayList<>();
+    private final ArrayList<JTextField> textFields = new ArrayList<>();
 
-    private JFrame frmCarParking;
-    private JTextField tfLicensePlate;
-    private JTextField tfSlotCode;
-    private JButton donebtn;
+    private JFrame mainFrame;
+    private JTextField licensePlateField;
+    private JTextField slotCodeField;
+    private JButton doneButton;
 
     private SQLite db;
 
-    //to create the application
     public ParkingLot() {
         initialize();
     }
 
-    //launch the application
+    // launch the app
     public static void main(String[] args) {
         EventQueue.invokeLater(() -> {
             try {
                 ParkingLot window = new ParkingLot();
-                window.frmCarParking.paint(null);
-                window.frmCarParking.setVisible(true);
+                window.mainFrame.paint(null);
+                window.mainFrame.setVisible(true);
             } catch (Exception e) {
                 showError(e.getMessage(), true);
             }
@@ -66,22 +62,22 @@ public class ParkingLot {
         JOptionPane.showMessageDialog(null, new JTextArea(msg));
     }
 
-    //initializing the contents of the frame
     private void initialize() {
-        // file stuff
         try {
+            // db connection
             db = new SQLite("parking_lot.db");
         } catch (Exception e) {
             showError(e.getMessage(), true);
-            return;
         }
 
-        frmCarParking = new JFrame();
-        frmCarParking.getContentPane().setBackground(Color.WHITE);
-        frmCarParking.setTitle("Car Parking Management System");
-        frmCarParking.setBounds(100, 100, 761, 442);
-        frmCarParking.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frmCarParking.getContentPane().setLayout(null);
+        // main frame
+        mainFrame = new JFrame();
+        mainFrame.getContentPane().setBackground(Color.WHITE);
+        mainFrame.setTitle("Car Parking Management System");
+        mainFrame.setBounds(100, 100, 761, 442);
+        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mainFrame.setLayout(null);
+        mainFrame.setResizable(false);
 
         JLabel label = new JLabel("CAR PARKING MANAGEMENT SYSTEM");
         label.setForeground(new Color(128, 0, 0));
@@ -89,96 +85,63 @@ public class ParkingLot {
         label.setBounds(0, 0, 752, 44);
         label.setHorizontalAlignment(JLabel.CENTER);
         label.setVerticalAlignment(JLabel.CENTER);
-        frmCarParking.getContentPane().add(label);
+        mainFrame.add(label);
 
         JLabel labelus = new JLabel("Programmed by Busra DEDEOGLU and Yigit EGEMEN");
         labelus.setFont(new Font("Sitka Text", Font.ITALIC, 20));
         labelus.setForeground(Color.BLACK);
         labelus.setBounds(122, 40, 740, 40);
-        frmCarParking.getContentPane().add(labelus);
+        mainFrame.add(labelus);
 
         JLabel lbldis = new JLabel("DISABLED PARKING ONLY: A-D,B-D,C-D");
         lbldis.setFont(FONT);
         lbldis.setForeground(SystemColor.text);
         lbldis.setBounds(50, 380, 360, 20);
-        frmCarParking.getContentPane().add(lbldis);
+        mainFrame.getContentPane().add(lbldis);
 
         JLabel lblNewLabel_1 = new JLabel("THANK YOU AND DRIVE SAFELY!");
         lblNewLabel_1.setFont(new Font("Sitka Text", Font.BOLD, 20));
         lblNewLabel_1.setForeground(SystemColor.text);
         lblNewLabel_1.setBounds(386, 370, 360, 30);
-        frmCarParking.getContentPane().add(lblNewLabel_1);
+        mainFrame.getContentPane().add(lblNewLabel_1);
 
-        addParkingSpots();
-        parkedCars = db.getParkedCars(this);
+        addParkingSpotsToGUI();
+        db.assignParkedCarsToSpots(this);
         updateParkingSpots(parkingSpots.get(0), false);
 
         ActionListener doneListener = unnecessary_arg -> parkButtonAction();
 
         // LICENSE PLATE text
-        addTextPane("License Plate:", 386, 95, 109, 25, false);
+        addTextPane("License Plate:", 386, 95, 96, 20, false);
         // LICENSE PLATE field
-        tfLicensePlate = addTextField(null, 510, 95, 100, 25, false);
+        licensePlateField = addTextField(null, 510, 95, 100, 20, false);
 
         // SLOT text
-        addTextPane("Slot:", 386, 135, 46, 25, false);
+        addTextPane("Slot:", 386, 135, 96, 20, false);
         // SLOT field
-        tfSlotCode = addTextField(null, 510, 135, 40, 25, false);
+        slotCodeField = addTextField(null, 510, 135, 40, 20, false);
 
         // DONE button
-        donebtn = new JButton("Park");
-        donebtn.addActionListener(doneListener);
-        donebtn.setFont(new Font("Sitka Text", Font.PLAIN, 12));
-        donebtn.setBounds(510, 338, 89, 23);
-        frmCarParking.getContentPane().add(donebtn);
+        doneButton = new JButton("Park");
+        doneButton.addActionListener(doneListener);
+        doneButton.setFont(new Font("Sitka Text", Font.PLAIN, 12));
+        doneButton.setBounds(510, 338, 89, 23);
+        mainFrame.getContentPane().add(doneButton);
 
         // background
         JLabel labelback = new JLabel();
         labelback.setIcon(new ImageIcon("assets/bg.jpg"));
         labelback.setBounds(0, 79, 745, 324);
-        frmCarParking.getContentPane().add(labelback);
-
-        //fee changing //need
-        /*JTextPane pnmin = new JTextPane();
-        pnmin.setBackground(Color.BLACK);
-        pnmin.setForeground(Color.WHITE);
-        pnmin.setFont(new Font("Sitka Text", Font.BOLD, 13));
-        pnmin.setText("fee-min:");
-        pnmin.setBounds(386, 305, 65, 25);
-        frmCarParking.getContentPane().add(pnmin);
-        // field
-        JTextField tfmin = new JTextField();
-        tfmin.setBackground(SystemColor.inactiveCaptionBorder);
-        tfmin.setColumns(10);
-        tfmin.setBounds(460, 305, 30, 25);
-        frmCarParking.getContentPane().add(tfmin);
-        String feemin = tfmin.getText();
-        //int feehour = Integer.parseInt(feemin);
-
-            JTextPane pnmin1 = new JTextPane();
-            pnmin1.setBackground(Color.BLACK);
-            pnmin1.setForeground(Color.WHITE);
-            pnmin1.setFont(new Font("Sitka Text", Font.BOLD, 13));
-            pnmin1.setText("fee-hour:");
-            pnmin1.setBounds(500, 305, 65, 25);
-            frmCarParking.getContentPane().add(pnmin1);
-        //int feehour1 = feehour * 60;
-       // int feehour2 = Integer.toString(feehour1);
-            JTextField tfmin1 = new JTextField();
-            tfmin1.setBackground(SystemColor.inactiveCaptionBorder);
-            tfmin1.setColumns(10);
-            tfmin1.setBounds(570, 305, 30, 25);
-            frmCarParking.getContentPane().add(tfmin1);*/
-
+        mainFrame.getContentPane().add(labelback);
     }
 
-    private void addParkingSpots() {
+    private void addParkingSpotsToGUI() {
         JPanel panel = new JPanel();
         panel.setBackground(SystemColor.activeCaption);
         panel.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, new Color(192, 192, 192), Color.LIGHT_GRAY));
         panel.setBounds(0, 79, 352, 324);
         panel.setLayout(null);
-        frmCarParking.add(panel);
+        mainFrame.add(panel);
 
         ActionListener chekboxListener = e -> updateParkingSpots((ParkingSpot) e.getSource(), false);
 
@@ -210,6 +173,13 @@ public class ParkingLot {
         }
     }
 
+    public ParkingSpot getParkingSpotWithCode(String code) {
+        for (ParkingSpot spot : parkingSpots) {
+            if (spot.getSpotCode().equals(code))
+                return spot;
+        }
+        return null;
+    }
 
     void updateParkingSpots(ParkingSpot updatedCheckbox, boolean untickUpdated) {
         if (untickUpdated)
@@ -233,13 +203,13 @@ public class ParkingLot {
             // if selected
             if (updatedCheckbox.isSelected()) {
                 // move its name to the SLOT field
-                tfSlotCode.setText(updatedCheckbox.getSpotCode());
+                slotCodeField.setText(updatedCheckbox.getSpotCode());
 
                 // make the selected one gray if empty
                 if (updatedCheckbox.isFree()) {
                     updatedCheckbox.setBackground(Color.GRAY);
                     updatedCheckbox.setText(updatedCheckbox.getSpotCode());
-                    donebtn.setText("Park");
+                    doneButton.setText("Park");
 
                     // remove parked fields
                     removeParkedVehicleInfo();
@@ -247,7 +217,7 @@ public class ParkingLot {
                     Vehicle parkedVehicle = updatedCheckbox.getParkedVehicle();
 
                     // move license plate too if parked
-                    tfLicensePlate.setText(parkedVehicle.getLicensePlate());
+                    licensePlateField.setText(parkedVehicle.getLicensePlate());
 
                     // start time
                     addTextPane("Entry Date:", 386, 220, 96, 20, true);
@@ -255,16 +225,16 @@ public class ParkingLot {
                     addTextField(parkedVehicle.getEntryDateString(), 510, 220, 200, 20, true).setEditable(false);
 
                     // current time
-                    addTextPane("Current Date", 386, 260, 96, 20, true);
+                    addTextPane("Current Date:", 386, 260, 96, 20, true);
                     // current time field
                     addTextField(LocalDateTime.now().format(dateFormatter), 510, 260, 200, 20, true).setEditable(false);
 
                     // current fee
-                    addTextPane("Current Fee", 386, 300, 96, 20, true);
+                    addTextPane("Current Fee:", 386, 300, 96, 20, true);
                     // current fee field
                     addTextField(decimalFormat.format(parkedVehicle.getCurrentFee()), 510, 300, 50, 20, true);
 
-                    donebtn.setText("Unpark");
+                    doneButton.setText("Unpark");
                     updatedCheckbox.setBackground(new Color(114, 1, 1));
                 }
             } else {
@@ -274,8 +244,8 @@ public class ParkingLot {
     }
 
     public void parkButtonAction() {
-        String licensePlate = tfLicensePlate.getText();
-        String slotCode = tfSlotCode.getText();
+        String licensePlate = licensePlateField.getText();
+        String slotCode = slotCodeField.getText();
 
         if (licensePlate.equals("") || slotCode.equals("")) {
             showError("License Plate and Slot can not be empty!", false);
@@ -316,19 +286,11 @@ public class ParkingLot {
             return;
         }
 
-        tfLicensePlate.setText("");
-        tfSlotCode.setText("");
+        licensePlateField.setText("");
+        slotCodeField.setText("");
     }
 
-    public ParkingSpot getParkingSpotWithCode(String code) {
-        for (ParkingSpot spot : parkingSpots) {
-            if (spot.getSpotCode().equals(code))
-                return spot;
-        }
-        return null;
-    }
-
-    public JTextPane addTextPane(String str, int x, int y, int width, int height, boolean removeWhenUpdated) {
+    public void addTextPane(String str, int x, int y, int width, int height, boolean removeWhenUpdated) {
         JTextPane pane = new JTextPane();
         pane.setForeground(Color.WHITE);
         pane.setBackground(Color.BLACK);
@@ -336,11 +298,9 @@ public class ParkingLot {
         pane.setText(str);
         pane.setBounds(x, y, width, height);
 
-        frmCarParking.add(pane);
+        mainFrame.add(pane);
         if (removeWhenUpdated)
             textPanes.add(pane);
-
-        return pane;
     }
 
     public JTextField addTextField(String str, int x, int y, int width, int height, boolean removeWhenUpdated) {
@@ -351,7 +311,7 @@ public class ParkingLot {
         field.setColumns(10);
         field.setBounds(x, y, width, height);
 
-        frmCarParking.add(field);
+        mainFrame.add(field);
         if (removeWhenUpdated)
             textFields.add(field);
 
@@ -359,20 +319,14 @@ public class ParkingLot {
     }
 
     public void removeParkedVehicleInfo() {
-        for (Component comp :
-                frmCarParking.getContentPane().getComponents()) {
-            if (textFields.contains(comp) || textPanes.contains(comp)) {
-                frmCarParking.remove(comp);
-                frmCarParking.revalidate();
-                frmCarParking.repaint();
+        for (Component comp : textFields)
+            mainFrame.remove(comp);
+        for (Component comp : textPanes)
+            mainFrame.remove(comp);
 
-                if (comp instanceof JTextField)
-                    textFields.remove(comp);
-                if (comp instanceof JTextPane)
-                    textPanes.remove(comp);
-            }
-
-        }
+        textFields.clear();
+        textPanes.clear();
+        mainFrame.revalidate();
+        mainFrame.repaint();
     }
-
 }
