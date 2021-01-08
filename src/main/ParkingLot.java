@@ -92,7 +92,7 @@ public class ParkingLot {
         label.setVerticalAlignment(JLabel.CENTER);
         mainFrame.add(label);
 
-        JLabel labelus = new JLabel("Programmed by Busra DEDEOGLU and Yigit EGEMEN");
+        JLabel labelus = new JLabel("Programmed by Büşra DEDEOĞLU and Yiğit EGEMEN");
         labelus.setFont(new Font("Sitka Text", Font.ITALIC, 20));
         labelus.setForeground(Color.BLACK);
         labelus.setBounds(122, 40, 740, 40);
@@ -276,7 +276,7 @@ public class ParkingLot {
                         "\nEntry Time:\t\t" + vehicle.getEntryDateString() +
                         "\nDeparture Time:\t" + vehicle.getDepartureDateString() +
                         "\nTotal Park Time:\t" + vehicle.getDurationUntilDeparture().toMinutes() + " minute(s)." +
-                        "\nThe fee:\t\t $" + fee);
+                        "\nThe fee:\t\t $" + decimalFormat.format(fee));
             }
             // park new car
             else {
