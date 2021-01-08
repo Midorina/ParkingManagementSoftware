@@ -24,8 +24,8 @@ public class ParkingLot {
     };
 
     private final ArrayList<ParkingSpot> parkingSpots = new ArrayList<>();
-    private final ArrayList<JTextPane> textPanes = new ArrayList<>();
-    private final ArrayList<JTextField> textFields = new ArrayList<>();
+    private final ArrayList<JTextPane> toBeRemovedPanes = new ArrayList<>();
+    private final ArrayList<JTextField> toBeRemovedFields = new ArrayList<>();
 
     private JFrame mainFrame;
     private JTextField licensePlateField;
@@ -59,7 +59,9 @@ public class ParkingLot {
     }
 
     static void showSuccess(String msg) {
-        JOptionPane.showMessageDialog(null, new JTextArea(msg));
+        JTextArea comp = new JTextArea(msg);
+        comp.setBackground(new Color(238, 238, 238));
+        JOptionPane.showMessageDialog(null, comp);
     }
 
     private void initialize() {
@@ -78,6 +80,9 @@ public class ParkingLot {
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setLayout(null);
         mainFrame.setResizable(false);
+
+        ImageIcon img = new ImageIcon("assets/car.png");
+        mainFrame.setIconImage(img.getImage());
 
         JLabel label = new JLabel("CAR PARKING MANAGEMENT SYSTEM");
         label.setForeground(new Color(128, 0, 0));
@@ -300,7 +305,7 @@ public class ParkingLot {
 
         mainFrame.add(pane);
         if (removeWhenUpdated)
-            textPanes.add(pane);
+            toBeRemovedPanes.add(pane);
     }
 
     public JTextField addTextField(String str, int x, int y, int width, int height, boolean removeWhenUpdated) {
@@ -313,19 +318,19 @@ public class ParkingLot {
 
         mainFrame.add(field);
         if (removeWhenUpdated)
-            textFields.add(field);
+            toBeRemovedFields.add(field);
 
         return field;
     }
 
     public void removeParkedVehicleInfo() {
-        for (Component comp : textFields)
+        for (Component comp : toBeRemovedFields)
             mainFrame.remove(comp);
-        for (Component comp : textPanes)
+        for (Component comp : toBeRemovedPanes)
             mainFrame.remove(comp);
 
-        textFields.clear();
-        textPanes.clear();
+        toBeRemovedFields.clear();
+        toBeRemovedPanes.clear();
         mainFrame.revalidate();
         mainFrame.repaint();
     }
