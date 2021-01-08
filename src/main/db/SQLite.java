@@ -71,15 +71,15 @@ public class SQLite {
         return new Vehicle(ID, licensePlate, parkedSpot, LocalDateTime.now(), null);
     }
 
-    public void updateVehicle(Vehicle temp) throws Exception {
+    public void updateVehicle(Vehicle vehicle) throws Exception {
         String sql = "UPDATE parked_cars SET LICENSE_PLATE=?, PARKED_SPOT=?, ENTRY_DATE=?, DEPARTURE_DATE=? WHERE id=?;";
 
         try (PreparedStatement pstmt = c.prepareStatement(sql)) {
-            pstmt.setString(1, temp.getLicensePlate());
-            pstmt.setString(2, temp.getParkedSpot().getSpotCode());
-            pstmt.setString(3, temp.getEntryDate().format(SQLiteDateFormatter));
-            pstmt.setString(4, temp.getDepartureDate().format(SQLiteDateFormatter));
-            pstmt.setInt(5, temp.getDbID());
+            pstmt.setString(1, vehicle.getLicensePlate());
+            pstmt.setString(2, vehicle.getParkedSpot().getSpotCode());
+            pstmt.setString(3, vehicle.getEntryDate().format(SQLiteDateFormatter));
+            pstmt.setString(4, vehicle.getDepartureDate().format(SQLiteDateFormatter));
+            pstmt.setInt(5, vehicle.getDbID());
 
             pstmt.executeUpdate();
         }

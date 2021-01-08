@@ -11,17 +11,8 @@ public class ParkingSpot extends JCheckBox {
         this.spotCode = spotCode;
     }
 
-    public boolean isFree() {
-        return vehicle == null;
-    }
-
-    public void park(Vehicle vehicle) throws Exception {
-        if (!this.isFree()) {
-            throw new Exception("Spot isn't free!");
-        }
-
-        this.vehicle = vehicle;
-        vehicle.setParkedSpot(this);
+    public String getSpotCode() {
+        return spotCode;
     }
 
     public Vehicle getParkedVehicle() {
@@ -36,7 +27,16 @@ public class ParkingSpot extends JCheckBox {
         this.vehicle = null;
     }
 
-    public String getSpotCode() {
-        return spotCode;
+    public boolean isFree() {
+        return vehicle == null;
+    }
+
+    public void park(Vehicle vehicle) throws Exception {
+        if (!this.isFree()) {
+            throw new Exception("Spot isn't free!");
+        }
+
+        this.vehicle = vehicle;
+        vehicle.setParkedSpot(this);
     }
 }

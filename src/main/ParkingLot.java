@@ -28,9 +28,9 @@ public class ParkingLot {
     private final ArrayList<JTextField> toBeRemovedFields = new ArrayList<>();
 
     private JFrame mainFrame;
+    private JButton doneButton;
     private JTextField licensePlateField;
     private JTextField slotCodeField;
-    private JButton doneButton;
 
     private SQLite db;
 

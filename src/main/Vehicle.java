@@ -8,8 +8,8 @@ import java.time.LocalDateTime;
 public class Vehicle {
     private final int dbID;
     private final String licensePlate;
-    private final LocalDateTime entryDate;
     private ParkingSpot parkedSpot;
+    private final LocalDateTime entryDate;
     private LocalDateTime departureDate;
 
 
@@ -26,9 +26,6 @@ public class Vehicle {
         this.departureDate = departureDate;
     }
 
-    public boolean isCurrentlyParked() {
-        return this.departureDate == null;
-    }
 
     public int getDbID() {
         return this.dbID;
@@ -46,17 +43,19 @@ public class Vehicle {
         return entryDate;
     }
 
-    public String getEntryDateString() {
-        return entryDate.format(ParkingLot.dateFormatter);
-    }
-
     public LocalDateTime getDepartureDate() {
         return departureDate;
+    }
+
+
+    public String getEntryDateString() {
+        return entryDate.format(ParkingLot.dateFormatter);
     }
 
     public String getDepartureDateString() {
         return departureDate.format(ParkingLot.dateFormatter);
     }
+
 
     public Duration getDurationUntilDeparture() {
         return Duration.between(entryDate, departureDate);
@@ -74,6 +73,11 @@ public class Vehicle {
         return getCurrentDuration().toMinutes() * ParkingLot.feePerMinute;
     }
 
+    public double unparkAndGetFee(SQLite db) throws Exception {
+        unpark(db);
+        return getFeeUntilDeparture();
+    }
+
     public void setDepartureDate(LocalDateTime departureDate) {
         this.departureDate = departureDate;
     }
@@ -89,10 +93,7 @@ public class Vehicle {
         parkedSpot.removeVehicle();
     }
 
-    public double unparkAndGetFee(SQLite db) throws Exception {
-        unpark(db);
-        return getFeeUntilDeparture();
+    public boolean isCurrentlyParked() {
+        return this.departureDate == null;
     }
-
-
 }
